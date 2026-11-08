@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Passkey Demo</title>
+  <style>
+    :root {
+      --bg: #1f2023;
+      --card: #2b2c30;
+      --text: #e8eaed;
+      --muted: #9aa0a6;
+      --accent: #8ab4f8;
+      --ok: #81c995;
+      --err: #f28b82;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      padding: 16px;
+    }
+    .card {
+      width: 100%;
+      max-width: 420px;
+      background: var(--card);
+      border-radius: 20px;
+      padding: 32px;
+    }
+    h1 { margin: 0 0 4px; font-size: 1.6rem; font-weight: 500; }
+    .sub { margin: 0 0 24px; color: var(--muted); font-size: .95rem; }
+    label { display: block; font-size: .85rem; color: var(--muted); margin-bottom: 6px; }
+    input {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid #55575c;
+      background: #1f2023;
+      color: var(--text);
+      font-size: 1rem;
+      margin-bottom: 16px;
+    }
+    input:focus { outline: 2px solid var(--accent); border-color: transparent; }
+    .row { display: flex; gap: 10px; }
+    button {
+      flex: 1;
+      padding: 12px 16px;
+      border: 0;
+      border-radius: 999px;
+      font-size: .95rem;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    .primary { background: var(--accent); color: #0b1a33; }
+    .secondary { background: transparent; color: var(--accent); border: 1px solid #55575c; }
+    button:disabled { opacity: .5; cursor: not-allowed; }
+    #status { margin-top: 20px; min-height: 1.4em; font-size: .9rem; }
+    .ok { color: var(--ok); }
+    .err { color: var(--err); }
+    #dashboard { display: none; }
+    pre {
+      background: #1f2023;
+      padding: 12px;
+      border-radius: 10px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-size: .85rem;
+      color: var(--muted);
+    }
+    .note { margin-top: 20px; font-size: .78rem; color: var(--muted); line-height: 1.5; }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <section id="auth">
+      <h1>Sign in</h1>
+      <p class="sub">Use a passkey (Windows Hello, fingerprint, face, or PIN)</p>
+
+      <label for="username">Username</label>
+      <input id="username" autocomplete="username webauthn" placeholder="e.g. kyle" />
+
+      <div class="row">
+        <button id="registerBtn" class="secondary">Create passkey</button>
+        <button id="loginBtn" class="primary">Sign in</button>
+      </div>
+    </section>
+
+    <section id="dashboard">
+      <h1>Welcome, <span id="who"></span></h1>
+      <p class="sub">You were verified by your device, and the server checked the signature.</p>
+      <div class="row" style="margin-bottom:16px">
+        <button id="secretBtn" class="secondary">Call protected API</button>
+        <button id="logoutBtn" class="primary">Log out</button>
+      </div>
+      <pre id="secretOut">(protected data will show here)</pre>
+    </section>
+
+    <div id="status" role="status"></div>
+
+    <p class="note">
+      First click "Create passkey" to register, then "Sign in". Windows will show its
+      "Making sure it's you" dialog each time. Data is stored in server memory, so restarting
+      the server clears all users.
+    </p>
+  </main>
+
+  <script src="/simplewebauthn-browser.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>
